@@ -62,7 +62,7 @@ def file_to_lines(path):
         new_line = True
         line = []
         while True:
-            current = f.read(1)
+            current = bytes(f.read(1))
             if current == b'':
                 # EOF
                 yield ''.join(line)
