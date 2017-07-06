@@ -6,7 +6,7 @@ import asyncore
 import asynchat
 import socket
 import io
-
+import email
 
 class Request(object):
 
@@ -64,6 +64,7 @@ def file_to_lines(path):
         print("Path is a string")
     elif isinstance(path, io.BytesIO):
         q = path
+        q.seek(0)
         print("Path is a BytesIO")
 
     with q as f:
@@ -153,7 +154,7 @@ class Session(asynchat.async_chat):
         print("Do Retr: %s" % (request.message_nr))
         if not m:
             raise Pop3Exception()
-        return Response.ok(file_to_lines(m.path))
+        return Response.ok(file_to_lines(io.BytesIO(m.path)))
 
     def do_capa(self, request):
         capabilities = [n for n in dir(self)

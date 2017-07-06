@@ -17,7 +17,7 @@ class Message(object):
         self.message = message
         self.nr = counter
         self.uid = uuid.uuid4().hex
-        self.path = io.BytesIO(message.as_string())
+        self.path = message.as_string()
         self.size = len(message.as_string()) # Not sure if this is equal to the size in bytes
         self.deleted = True if 'D' in message.get_flags() else False
 
