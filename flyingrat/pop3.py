@@ -5,6 +5,7 @@ from __future__ import (unicode_literals, print_function, division,
 import asyncore
 import asynchat
 import socket
+import io
 
 
 class Request(object):
@@ -57,7 +58,12 @@ class Pop3Exception(Exception):
 
 
 def file_to_lines(path):
-    with open(path, 'rb') as f:
+    if isinstance(path, basestring):
+        q = open(path, 'rb')
+    elif isinstance(path, io.BytesIO):
+        q = path
+
+    with q as f:
         last = None
         new_line = True
         line = []
