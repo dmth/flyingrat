@@ -58,10 +58,13 @@ class Pop3Exception(Exception):
 
 
 def file_to_lines(path):
+    print("File to lines was called")
     if isinstance(path, basestring):
         q = open(path, 'rb')
+        print("Path is a string")
     elif isinstance(path, io.BytesIO):
         q = path
+        print("Path is a BytesIO")
 
     with q as f:
         last = None
@@ -139,6 +142,7 @@ class Session(asynchat.async_chat):
         raise Pop3Exception()
 
     def do_quit(self, request):
+        print("Quit was called")
         # TODO Commit transaction
         if self.store.delete_marked_messages():
             return Response.ok()
@@ -146,6 +150,7 @@ class Session(asynchat.async_chat):
 
     def do_retr(self, request):
         m = self.store.get(request.message_nr)
+        print("Do Retr: %s" % (request.message_nr))
         if not m:
             raise Pop3Exception()
         return Response.ok(file_to_lines(m.path))
@@ -175,6 +180,7 @@ class Session(asynchat.async_chat):
 
     def do_list(self, request):
         if not request.has_args:
+            print("Do LIST")
             return Response.ok(['%d %d' % (m.nr, m.size) for m in self.store])
         m = self.store.get(request.message_nr)
         if m:
