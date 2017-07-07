@@ -3,24 +3,23 @@ from __future__ import (unicode_literals, print_function, division,
                         absolute_import)
 
 import os
-import errno
 import mailbox
 import contextlib
-import io
 import datetime
-import uuid
+import io
 
 
 class Message(object):
 
-    def __init__(self, message, counter):
+    def __init__(self, message, key):
         self.message = message
-        self.nr = counter
-        self.uid = counter # uuid.uuid4().hex
-        self.path = message.as_string()
+        self.nr = self.uid = key
         self.size = len(message.as_string()) # Not sure if this is equal to the size in bytes
-        self.deleted = True if 'D' in message.get_flags() else False
+        self.deleted = ('D' in self.message.get_flags())
 
+    @property
+    def path(self):
+        return io.BytesIO(self.message.as_string())
 
 @contextlib.contextmanager
 def _create_outbox(dirname):
@@ -52,7 +51,6 @@ class Store(object):
 
     def __init__(self, directory):
         self.directory = directory
-        self.counter = 0
         self.messages = []
         self.inbox = _create_inbox(directory)
         self.outbox = _create_outbox(directory)
@@ -79,20 +77,16 @@ class Store(object):
         :return:
         """
         self.inbox.lock()
-        self.counter = len(self.inbox.values())
         self.messages = []
 
         for key, value in self.inbox.items():
             # Start IDs with 1 and not with 0
-            self.messages.append(Message(value, key+1))
-
-        if self.counter == 0:
-            print("The inbox file seems to be empty.")
+            plussedkey = key+1
+            self.messages.append(Message(value, plussedkey))
 
         self.inbox.unlock()
 
     def get(self, nr, include_deleted=False):
-        print("Getting Message with key %s"% (nr))
         messages = self.messages
         if not include_deleted:
             messages = self.non_deleted_messages
@@ -107,26 +101,18 @@ class Store(object):
         :param data:
         :return:
         """
-        print("Saving Message to Outbox")
         with self.outbox as mbox:
             mbox.add(mailbox.mboxMessage(data))
 
     def delete_marked_messages(self):
-        print("Was asked to delete Messages.")
         self.inbox.lock()
         for m in self.messages:
             if m.deleted:
-                print("Deleting Message with Key: %s"% (m.nr))
-                # Remember Weve +1ed the key in load
+                # Remember we've +1ed the key in load()
+                # so we need to -1 here
                 self.inbox.remove(m.nr-1)
                 self.messages.remove(m)
-                self.counter -= 1
         self.inbox.flush()
         self.inbox.unlock()
 
         return True
-
-    def refresh(self):
-        self.inbox = _create_inbox(self.directory)
-        # reload the mailbox
-        self.load()

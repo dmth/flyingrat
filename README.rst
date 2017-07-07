@@ -3,7 +3,9 @@ Flying Rat
 
 Flying Rat is a simple mail server for local development. It supports both SMTP to send messages and POP3 to fetch them.
 
-All messages over SMTP are dropped into a single (local) mailbox, which allows you to test your application with real email addresses without running the risk of actually sending messages to those recipients. Running a simple mail server also means it's a lot easier to configure your application to send those messages during local development. The SMTP server runs on localhost at port 5050 by default and that's all you need to configure.
+All messages over SMTP are dropped into an .mbox-file named after the current date, which allows you to test your application with real email addresses without running the risk of actually sending messages to those recipients.
+Running a simple mail server also means it's a lot easier to configure your application to send those messages during local development.
+The SMTP server runs on localhost at port 5050 by default and that's all you need to configure.
 
 When a message is received it's stored on disk, either to a temporary directory or a directory of your choosing::
 
@@ -12,14 +14,19 @@ When a message is received it's stored on disk, either to a temporary directory 
     ^C
     $ flyingrat testrun/
 
-This means you can examine the contents of the directory to view the actual message. But by default Flying Rat will also run a basic POP3 server on port 5051. So instead of having to watch the directory, just hook up your favorite email client (if you have one) to ``localhost:5051`` with any username and password.
+This means you can examine the contents of the directory to view the actual message. 
+But by default Flying Rat will also run a basic POP3 server on port 5051.
+It serves the file inbox.mbox by pop3.
+
 
 Installing
 ----------
 
-Flying Rat runs on Python 2. The easiest way to install is through `pipsi <https://github.com/mitsuhiko/pipsi>`_::
+Currently no installation-method is recommended.
 
-    $ pipsi install flyingrat
+You may also run the script directly, for instance::
+
+    python2 -m flyingrat.cli
 
 
 Options

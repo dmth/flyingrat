@@ -6,6 +6,8 @@ import asyncore
 import asynchat
 import socket
 import io
+
+
 class Request(object):
 
     def __init__(self, command, *args):
@@ -55,14 +57,13 @@ class Pop3Exception(Exception):
     pass
 
 
-def file_to_lines(path):
-    if isinstance(path, basestring):
-        q = open(path, 'rb')
-    elif isinstance(path, io.BytesIO):
-        q = path
-        q.seek(0)
-
-    with q as f:
+def stream_to_lines(stream):
+    """
+    Should work on a io.BytesIO, or on an open file
+    :param stream: io.BytesIO or file
+    :return:
+    """
+    with stream as f:
         last = None
         new_line = True
         line = []
@@ -147,7 +148,7 @@ class Session(asynchat.async_chat):
         m = self.store.get(request.message_nr)
         if not m:
             raise Pop3Exception()
-        return Response.ok(file_to_lines(io.BytesIO(m.path)))
+        return Response.ok(stream_to_lines(m.path))
 
     def do_capa(self, request):
         capabilities = [n for n in dir(self)
