@@ -76,3 +76,5 @@ class Smtp(SMTPServer):
 
     def process_message(self, peer, mailfrom, rcpttos, data):
         self.store.save(data)
+
+cli()

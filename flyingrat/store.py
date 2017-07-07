@@ -16,7 +16,7 @@ class Message(object):
     def __init__(self, message, counter):
         self.message = message
         self.nr = counter
-        self.uid = uuid.uuid4().hex
+        self.uid = counter # uuid.uuid4().hex
         self.path = message.as_string()
         self.size = len(message.as_string()) # Not sure if this is equal to the size in bytes
         self.deleted = True if 'D' in message.get_flags() else False
@@ -72,6 +72,7 @@ class Store(object):
     def non_deleted_messages(self):
         return [m for m in self.messages if not m.deleted]
 
+
     def load(self):
         """
         Load the inbox-mbox file into the flyingrat datastructure.
@@ -79,9 +80,11 @@ class Store(object):
         """
         self.inbox.lock()
         self.counter = len(self.inbox.values())
+        self.messages = []
 
         for key, value in self.inbox.items():
-            self.messages.append(Message(value, key))
+            # Start IDs with 1 and not with 0
+            self.messages.append(Message(value, key+1))
 
         if self.counter == 0:
             print("The inbox file seems to be empty.")
@@ -110,11 +113,20 @@ class Store(object):
 
     def delete_marked_messages(self):
         print("Was asked to delete Messages.")
-        print("Deleting Messages is not supported, yet")
+        self.inbox.lock()
         for m in self.messages:
             if m.deleted:
                 print("Deleting Message with Key: %s"% (m.nr))
-                self.inbox.remove(m.nr)
+                # Remember Weve +1ed the key in load
+                self.inbox.remove(m.nr-1)
                 self.messages.remove(m)
+                self.counter -= 1
+        self.inbox.flush()
+        self.inbox.unlock()
+
         return True
 
+    def refresh(self):
+        self.inbox = _create_inbox(self.directory)
+        # reload the mailbox
+        self.load()
