@@ -53,7 +53,7 @@ class Store(object):
         self.directory = directory
         self.messages = []
         self.inbox = _create_inbox(directory)
-        self.outbox = _create_outbox(directory)
+        # self.outbox = _create_outbox(directory)
 
     def __len__(self):
         return len(self.non_deleted_messages)
@@ -69,7 +69,6 @@ class Store(object):
     @property
     def non_deleted_messages(self):
         return [m for m in self.messages if not m.deleted]
-
 
     def load(self):
         """
@@ -101,7 +100,7 @@ class Store(object):
         :param data:
         :return:
         """
-        with self.outbox as mbox:
+        with _create_outbox(self.directory) as mbox:
             mbox.add(mailbox.mboxMessage(data))
 
     def delete_marked_messages(self):
