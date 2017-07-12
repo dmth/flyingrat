@@ -7,21 +7,19 @@ def read(*paths):
 
 setup(
     name='flyingrat',
-    version='0.1.0',
+    version='0.2.0',
     description='Simple mail server for local development',
     long_description=read('README.rst'),
-    url='https://github.com/roam/flyingrat/',
-    author='Kevin Wetzels',
-    author_email='kevin@roam.be',
+    url='https://github.com/dmth/flyingrat/',
+    author='Kevin Wetzels, Dustin Demuth',
+    author_email='kevin@roam.be, dustin.demuth@intevation.de',
     license='BSD',
     packages=['flyingrat'],
     include_package_data=True,
-    install_requires=[
-        'Click'
-    ],
+    install_requires=[],
     entry_points='''
         [console_scripts]
-        flyingrat=flyingrat.cli:cli
+        flyingrat=flyingrat.cli:main
     ''',
     classifiers = [
         'Development Status :: 5 - Production/Stable',
