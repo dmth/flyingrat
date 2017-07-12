@@ -63,3 +63,12 @@ The most reliable source for possible options is the application itself. Just pa
     -pp [POP3_PASSWORD], --pop3-password [POP3_PASSWORD]
                             Password for the POP3 server (default: <any>)
 
+Windows
+-------
+The Mailserver is also running on Windows (tested with Windows 7).
+You require an installed Python2.7
+To install flyingrat for your user, just run the file ``bin\install.cmd``.
+Please make sure that the ``PythonPath`` was set correctly in ``bin\environment.cmd``
+
+To start the server, doubleclick ``bin\run.cmd``, If you run ``bin\help.cmd`` you
+can get more information how the Server can be started on Windows.
