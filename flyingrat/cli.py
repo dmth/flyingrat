@@ -9,8 +9,8 @@ import tempfile
 
 import argparse
 
-from .store import Store
-from .pop3 import Server as Pop3Server
+from flyingrat.store.store import Store
+from flyingrat.pop3.pop3 import Server as Pop3Server
 
 
 def parse_address(address):

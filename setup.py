@@ -1,5 +1,12 @@
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
+
+
+try:
+    import py2exe
+except ImportError:
+    pass
+
 
 def read(*paths):
     with open(os.path.join(*paths), 'r') as f:
@@ -14,7 +21,7 @@ setup(
     author='Kevin Wetzels, Dustin Demuth',
     author_email='kevin@roam.be, dustin.demuth@intevation.de',
     license='BSD',
-    packages=['flyingrat'],
+    packages=find_packages(),
     include_package_data=True,
     install_requires=[],
     entry_points='''
@@ -30,4 +37,12 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
     ],
+    console=["flyingrat/cli.py"],
+    options={
+        "py2exe":{
+            # "optimize": 2,
+            # "includes": ["pop3.py", "store.py"],
+            "packages": find_packages()
+        }
+    },
 )
