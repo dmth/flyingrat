@@ -2,12 +2,6 @@ import os
 from setuptools import setup, find_packages
 
 
-try:
-    import py2exe
-except ImportError:
-    pass
-
-
 def read(*paths):
     with open(os.path.join(*paths), 'r') as f:
         return f.read()
@@ -37,12 +31,4 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
     ],
-    console=["flyingrat/cli.py"],
-    options={
-        "py2exe":{
-            # "optimize": 2,
-            # "includes": ["pop3.py", "store.py"],
-            "packages": find_packages()
-        }
-    },
 )
