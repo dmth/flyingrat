@@ -5,9 +5,13 @@
 @ECHO --------------------------------------------------------
 @ECHO.
 @ECHO -HELP---------------------------------------------------
-@ECHO To run the server you need to use the install.cmd first.
-@ECHO If you already installed the Server, you ca run it like described in:
+@ECHO.
+@ECHO Usually an installation of the Server is not required.
+@ECHO Simply start the file "run.cmd" The file invokes the command:
 @ECHO "python -m flyingrat.cli"
+@ECHO The server provides some configurable parameters, especially the
+@ECHO directory where the Mails are stored. Start the Server with the --help
+@ECHO parameter, to see how it is used.
 @ECHO This is the output of this command:
 @ECHO.
 @python -m flyingrat.cli --help
