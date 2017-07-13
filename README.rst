@@ -68,7 +68,6 @@ Windows
 The Mailserver is also running on Windows (tested with Windows 7).
 You require an installed Python2.7
 
-You can run the server directly, an installation is usually not necessary.
 To install flyingrat for your user, just run the file ``bin\install.cmd``.
 Please make sure that the ``PythonPath`` was set correctly in ``bin\environment.cmd``
 
