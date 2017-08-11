@@ -61,7 +61,7 @@ def stream_to_lines(stream):
     """
     Should work on a io.BytesIO, or on an open file
     :param stream: io.BytesIO or file
-    :return:
+    :return: a generator that yields lines with type bytes (aka 'str')
     """
     with stream as f:
         last = None
@@ -71,7 +71,7 @@ def stream_to_lines(stream):
             current = bytes(f.read(1))
             if current == b'':
                 # EOF
-                yield ''.join(line)
+                yield b''.join(line)
                 return
             line.append(current)
             if new_line:
@@ -83,10 +83,10 @@ def stream_to_lines(stream):
                 # Done with this line
                 if last == b'\r':
                     # pass it without \r\n
-                    yield ''.join(line[:-2])
+                    yield b''.join(line[:-2])
                 else:
                     # pass it without \n
-                    yield ''.join(line[:-1])
+                    yield b''.join(line[:-1])
                 line = []
             last = current
 
@@ -205,7 +205,7 @@ class Session(asynchat.async_chat):
         if response.lines:
             for line in response.lines:
                 msg = b'%s\r\n' % line
-                self.push(msg.encode('ascii'))
+                self.push(msg)
             self.push(b'.\r\n'.encode('ascii'))
 
 
