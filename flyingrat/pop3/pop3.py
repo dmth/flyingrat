@@ -79,9 +79,14 @@ def stream_to_lines(stream):
                 if current == b'.':
                     # EOT indicator is .\r\n -- stuff extra dot at new line
                     line.append(b'.')
-            if last == b'\r' and current == 'b\n':
-                # Done with this line; pass it without \r\n
-                yield ''.join(line[:-2])
+            if current == b'\n':
+                # Done with this line
+                if last == b'\r':
+                    # pass it without \r\n
+                    yield ''.join(line[:-2])
+                else:
+                    # pass it without \n
+                    yield ''.join(line[:-1])
                 line = []
             last = current
 
