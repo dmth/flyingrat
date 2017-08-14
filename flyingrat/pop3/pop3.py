@@ -42,15 +42,15 @@ class Response(object):
 
     @classmethod
     def error(cls, lines=None):
-        return cls('-ERR', lines)
+        return cls(b'-ERR', lines)
 
     @classmethod
     def ok(cls, lines=None):
-        return cls('+OK', lines)
+        return cls(b'+OK', lines)
 
     @classmethod
     def ok_extra(cls, msg, lines=None):
-        return cls('+OK %s' % msg, lines)
+        return cls(b'+OK %s' % msg, lines)
 
 
 class Pop3Exception(Exception):
@@ -65,7 +65,6 @@ def stream_to_lines(stream):
     """
     with stream as f:
         last = None
-        new_line = True
         line = []
         while True:
             current = bytes(f.read(1))
@@ -74,9 +73,7 @@ def stream_to_lines(stream):
                 yield b''.join(line)
                 return
             line.append(current)
-            if new_line:
-                new_line = False
-                if current == b'.':
+            if len(line) == 0 and current == b'.':
                     # EOT indicator is .\r\n -- stuff extra dot at new line
                     line.append(b'.')
             if current == b'\n':
@@ -88,6 +85,7 @@ def stream_to_lines(stream):
                     # pass it without \n
                     yield b''.join(line[:-1])
                 line = []
+
             last = current
 
 
@@ -99,20 +97,20 @@ class Session(asynchat.async_chat):
         self.user = user
         self.password = password
         self.buffer = []
-        self.set_terminator('\r\n')
+        self.set_terminator(b'\r\n')
 
     def collect_incoming_data(self, data):
         self.buffer.append(data)
 
     def clear_buffer(self):
-        raw_request = ''.join(self.buffer).strip()
+        raw_request = b''.join(self.buffer).strip()
         self.buffer = []
         return raw_request
 
     def found_terminator(self):
         request_parts = self.clear_buffer().split()
         request = Request(request_parts[0], *request_parts[1:])
-        handler = getattr(self, 'do_%s' % request.command.lower(), None)
+        handler = getattr(self, b'do_%s' % request.command.lower(), None)
         response = None
         if handler and callable(handler):
             try:
@@ -157,11 +155,11 @@ class Session(asynchat.async_chat):
 
     def do_capa(self, request):
         capabilities = [n for n in dir(self)
-                        if n.startswith('do_') and callable(getattr(self, n))]
+                        if n.startswith(b'do_') and callable(getattr(self, n))]
         return Response.ok([n[3:].upper() for n in capabilities])
 
     def do_stat(self, request):
-        msg = '%d %d' % (len(self.store), self.store.total_byte_size)
+        msg = b'%d %d' % (len(self.store), self.store.total_byte_size)
         return Response.ok_extra(msg)
 
     def do_rset(self, request):
@@ -181,20 +179,20 @@ class Session(asynchat.async_chat):
     def do_list(self, request):
         if not request.has_args:
             if len(self.store) > 0:
-                return Response.ok(['%d %d' % (m.nr, m.size) for m in self.store])
+                return Response.ok([b'%d %d' % (m.nr, m.size) for m in self.store])
             else:
-                return Response.ok_extra('Mailbox is empty')
+                return Response.ok_extra(b'Mailbox is empty')
         m = self.store.get(request.message_nr)
         if m:
-            return Response.ok_extra('%d %d' % (m.nr, m.size))
+            return Response.ok_extra(b'%d %d' % (m.nr, m.size))
         raise Pop3Exception()
 
     def do_uidl(self, request):
         if not request.has_args:
             if len(self.store) > 0:
-                return Response.ok(['%d %s' % (m.nr, m.uid) for m in self.store])
+                return Response.ok([b'%d %s' % (m.nr, m.uid) for m in self.store])
             else:
-                return Response.ok_extra('Mailbox is empty')
+                return Response.ok_extra(b'Mailbox is empty')
         m = self.store.get(request.message_nr)
         if m:
             return Response.ok_extra('%d %s' % (m.nr, m.uid))
