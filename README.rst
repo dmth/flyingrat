@@ -18,6 +18,20 @@ This means you can examine the contents of the directory to view the actual mess
 But by default Flying Rat will also run a basic POP3 server on port 5051.
 It serves the file ``inbox.mbox`` by pop3.
 
+Purpose
+-------
+We at Intevation improved flyingrat to serve email to and from
+an offline ('airgapped') machine running Windows7 and Outlook 2010.
+Tested in this setting with Python2.7.
+
+The emails can be saved to mbox format from an KDE Kontact (KMail) application
+running on Debian, put on a transport media (e.g. an USB-drive), uploaded
+to Outlook via flyingrat's POP3. Sending emails works via SMTPS to
+mbox and then transfered back.
+
+Note that you must configure Outlook to delete emails when fetching them
+and using the right ports for POP3 and SMTP. Passwords must be configured,
+but flyingrat will accept them all. :)
 
 Installing
 ----------
