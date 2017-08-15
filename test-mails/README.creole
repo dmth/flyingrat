@@ -1,0 +1,27 @@
+== Emails for testing
+
+Purpose: test some aspects of the pop3 implementation {{{flyingrat}}}.
+
+* {{{test-7bit.mbox}}}, created by Outlook 2010 on Windows 7,
+  saved to mbox by flyingrat v0.2.0 with Python2.7 on Windows.
+
+This is a base test as the email is very simple.
+
+* {{{test-8bit-latin1.mbox}}} created with mutt,
+  saved to mbox with Kontact e35 on Debian, some headers edited
+* {{{test-8bit-utf8.mbox}}}, created
+  by copying and editing {{{test-8bit-latin1.mbox}}}
+
+Both 8bit test mails require that reading from file and transfering
+conserves the bytes, thus this Python2.7 type 'str' (aka 'binary' is used).
+
+* {{{test-7bit-bytestuffing.mbox}}},
+  copied and edited from the simple test mail.
+
+Tests the byte-stuffing per line which is necessary for POP3
+for each line that starts with a dot.
+
+=== Examples
+{{{
+cat test-mails/*.mbox >inbox.mbox
+}}}

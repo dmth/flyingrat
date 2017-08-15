@@ -1,0 +1,50 @@
+From bernhard@intevation.de Fri Aug 11 12:45:43 2017
+Return-Path: <bernhard@intevation.de>
+Received: from localhost (localhost [127.0.0.1])
+	 by mailserver.intevation.de (Cyrus v2.3.16-nocaps) with LMTPA;
+	 Fri, 11 Aug 2017 12:45:44 +0200
+X-Sieve: CMU Sieve 2.3
+Received: from localhost (localhost [127.0.0.1])
+	by mailserver.intevation.de (Postfix) with ESMTP id 336C662AA7
+	for <bernhard.reiter@intevation.de>; Fri, 11 Aug 2017 12:45:44 +0200 (CEST)
+X-Virus-Scanned: by amavisd-new at intevation.de
+X-Spam-Flag: NO
+X-Spam-Score: -6.55
+X-Spam-Level:
+X-Spam-Status: No, score=-6.55 tagged_above=-999 required=3.5
+	tests=[ALL_TRUSTED=-1, BAYES_00=-5, RP_MATCHES_RCVD=-0.55]
+	autolearn=ham autolearn_force=no
+Received: from mailserver.intevation.de ([127.0.0.1])
+	by localhost (mailserver.intevation.de [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 69Xv4RuotIOF for <bernhard.reiter@intevation.de>;
+	Fri, 11 Aug 2017 12:45:43 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by mailserver.intevation.de (Postfix) with ESMTP id B6F5E62AB1
+	for <bernhard.reiter@intevation.de>; Fri, 11 Aug 2017 12:45:43 +0200 (CEST)
+Received: from arda.intevation.de (arda.intevation.de [192.168.11.35])
+	by mailserver.intevation.de (Postfix) with ESMTP id A32D962AA7
+	for <bernhard@intevation.de>; Fri, 11 Aug 2017 12:45:43 +0200 (CEST)
+Received: by arda.intevation.de (Postfix, from userid 10003)
+	id 9A58021A; Fri, 11 Aug 2017 12:45:43 +0200 (CEST)
+Date: Fri, 11 Aug 2017 12:45:43 +0200
+From: Bernhard Reiter <bernhard@intevation.de>
+To: bernhard@intevation.de
+Subject: Test 8-bit Encoding UTF-8
+Message-ID: <20170811104543.GA15144@intevation.de>
+MIME-Version: 1.0
+Content-Type: text/plain;
+  charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-Kolab-Scheduling-Message: FALSE
+X-UID: 274194
+X-Length: 1825
+Status: R
+X-Status: NC
+X-KMail-EncryptionState:  
+X-KMail-SignatureState:  
+X-KMail-MDN-Sent:  
+
+hemdsärmlig
+
