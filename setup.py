@@ -8,7 +8,7 @@ def read(*paths):
 
 setup(
     name='flyingrat',
-    version='0.2.2',
+    version='0.2.3',
     description='Simple mail server for local development',
     long_description=read('README.rst'),
     url='https://github.com/dmth/flyingrat/',
