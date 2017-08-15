@@ -59,7 +59,11 @@ class Pop3Exception(Exception):
 
 def stream_to_lines(stream):
     """
-    Should work on a io.BytesIO, or on an open file
+    Should work on a io.BytesIO, or on an open file.
+    Turns and email into lines suitable for POP§ transfer:
+      * no line-endings
+      * leading dot characters byte-stuffed
+
     :param stream: io.BytesIO or file
     :return: a generator that yields lines with type bytes (aka 'str')
     """
@@ -73,7 +77,7 @@ def stream_to_lines(stream):
                 yield b''.join(line)
                 return
             line.append(current)
-            if len(line) == 0 and current == b'.':
+            if len(line) == 1 and current == b'.':
                     # EOT indicator is .\r\n -- stuff extra dot at new line
                     line.append(b'.')
             if current == b'\n':
