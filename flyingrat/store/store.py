@@ -2,11 +2,12 @@
 from __future__ import (unicode_literals, print_function, division,
                         absolute_import)
 
-import os
-import mailbox
 import contextlib
 import datetime
+from hashlib import sha256
 import io
+import mailbox
+import os
 import re
 
 
@@ -14,13 +15,16 @@ class Message(object):
 
     def __init__(self, message, key):
         self.message = message
-        self.nr = self.uid = key
+        self.nr = key
+
         # we have to consider that
         # pop3.stream_to_lines() will remove line endings and
         # pop3.Session.respond() will later add '\r\n' to each line.
         # We simulate this behaviour here
-        self.size = len(re.sub(b'(?<=[^\r])\n',b'\r\n',
-                               message.as_string()))
+        msg_as_string = re.sub(b'(?<=[^\r])\n',b'\r\n', message.as_string())
+        self.uid = sha256(msg_as_string).hexdigest()
+        self.size = len(msg_as_string)
+
         self.deleted = ('D' in self.message.get_flags())
 
     @property
